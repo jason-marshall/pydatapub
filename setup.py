@@ -8,4 +8,7 @@ setup(name='pydatapub',
       author_email='jason.p.marshall@gmail.com',
       license='MIT',
       packages=['pydatapub'],
+      install_requires=[
+          'numpy',
+      ],
       zip_safe=False)
