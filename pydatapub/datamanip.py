@@ -1,4 +1,5 @@
 import numpy as np
+from itertools import ifilter
 
 def get_data(filename,
              use_columns=None,
@@ -12,7 +13,7 @@ def get_data(filename,
     else:
         data = np.genfromtxt(filename, dtype=dtype)
 
-    columns = zip(*data[1:][start:end])
+    columns = zip(*data[0:][start:end])
         
     return columns
 
@@ -41,4 +42,23 @@ def subtract_constant(array,
         new_array[i] = array[i] - constant
 
     return new_array
+
+def mts_data(filename,
+             use_columns=None,
+             start=None,
+             end=None,
+             dtype='float'):
+
+    with open(filename, 'rb') as inp:
+        filtered_inp = ifilter(lambda x: not (x.startswith(' ') or x.startswith('M') or x.startswith('D') or x.startswith('S') or x.startswith('T')), inp)
+
+        # get specified columns
+        if use_columns !=None:
+            data = np.genfromtxt(filtered_inp, usecols = use_columns, dtype=dtype)
+        else:
+            data = np.genfromtxt(filtered_inp, dtype=dtype)
+
+        columns = zip(*data[0:][start:end])
+        
+    return columns
 
